@@ -1,0 +1,3 @@
+name = Menu content type
+description = Permite mostrar unicamente el enlace de cita en paciente
+core = 7.x

@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file firstmodule.module
+ * TODO: Enter file description here.
+ */
+ 
+ /**
+ * Implements hook_help():
+ */
+ 
+ function firstmodule_help($path, $arg) {
+   switch ($path) {
+     //Ayuda general para el modulo Firts example
+	 case 'admin/help#firstmodule':
+	   return '<p>' . t('This module shows a tea in to a block') . '</p>';
+	 //Ayuda general para el modulo Firts example
+	 case 'admin/structure/block':
+	   return '<p>' . t('Use this module to shows a tea in to a block') . '</p>';
+   }
+ }
+
+/**
+ * Implements hook_block_info().
+ */
+function firstmodule_block_info() {
+  // This example comes from node.module.
+  $blocks['welcome'] = array(
+    'info' => t('My first module, it make tea'),
+    'cache' => DRUPAL_NO_CACHE
+  );
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ */
+function firstmodule_block_view($delta = '') {
+  // This example is adapted from node.module.
+  $block = array();
+
+  switch ($delta) {
+    case 'welcome':
+      $block['subject'] = t('This module make tea');
+      $block['content'] = t('There is you tea and cake');
+      break;
+  }
+  return $block;
+}

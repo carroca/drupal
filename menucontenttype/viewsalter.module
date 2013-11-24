@@ -1,0 +1,14 @@
+/*
+* Implements hook_views_query_alter
+*/
+function modulo_personalizado_views_query_alter(&$view, &$query) {
+ if ($view->name == 'nombre_de_mi_vista') {
+   $query->where[0]['type'] = "OR";
+ }
+}
+/*
+* Implements hook_views_api
+*/
+function modulo_personalizado_views_api() {
+ return array("version" => "3.0");
+}

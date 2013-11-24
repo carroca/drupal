@@ -1,0 +1,3 @@
+name = Views Alter
+version = 7.x
+description = Altera una vista para cambiar los filtros contextuales de and por or

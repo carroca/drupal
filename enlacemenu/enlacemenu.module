@@ -1,0 +1,129 @@
+<?php
+  /**
+  *  Implements hook_menu().
+  */
+  
+  function enlacemenu_menu(){
+    $items['persona/%/%'] = array(
+	  'title' => 'Example URL 1',
+	  'page callback' => 'enlacemenu_url1',
+	  'access callback' => TRUE,
+	  'page arguments' => array(1,2),
+	  'type' => MENU_CALLBACK,
+	);
+	
+	$items['rango/%/%'] = array(
+	  'title' => 'consulta por rango',
+	  'page callback' => 'enlacemenu_rango',
+	  'access callback' => TRUE,
+	  'page arguments' => array(1,2),
+	  'type' => MENU_CALLBACK,
+	);
+	
+	$items['listausuario'] = array(
+	  'title' => 'Example URL 2',
+	  'page callback' => 'enlacemenu_listausuarios',
+	  'access callback' => TRUE,
+	  'type' => MENU_CALLBACK,
+	);
+	
+	$items['url1'] = array(
+	  'title' => 'Example URL 2',
+	  'page callback' => 'enlacemenu_url2',
+	  'access callback' => TRUE,
+	  'type' => MENU_NORMAL_ITEM,
+	);
+	
+	$items['url1/beta'] = array(
+	  'title' => 'Example URL 2 Beta',
+	  'page callback' => 'enlacemenu_url2',
+	  'access callback' => TRUE,
+	  'type' => MENU_DEFAULT_LOCAL_TASK,
+	);
+	
+	$items['url1/alpha'] = array(
+	  'title' => 'Example URL 2 Alpha',
+	  'page callback' => 'enlacemenu_url2',
+	  'access callback' => TRUE,
+	  'type' => MENU_LOCAL_TASK,
+	);
+
+	// Código ejemplos anteriores
+    // Ejemplo de URL con control de acceso
+    $items['intranet'] = array(
+      'title' => 'Intranet',
+      'page callback' => 'enlacemenu_intranet',
+      'access callback' => 'user_access',
+      'access arguments' => array('access to enlacemenu'),
+      'type' => MENU_CALLBACK,
+    );
+
+	return $items;
+  }
+
+  /**
+  *
+  */
+
+  function enlacemenu_rango($inicio = '', $final = '') {
+    /*$query = db_select('node', 'n')
+      ->fields('n', array('nid', 'title'));
+	$result = $query->execute();*/
+	
+	$result = db_query("SELECT nid, title FROM {node}");
+	
+	foreach($result as $fila){
+	  print $fila['nid'] . "  " . $fila['title'] ;
+	}
+
+  }
+
+  function enlacemenu_url1($nombre = '', $apellido = ''){
+   $output = t('Hola ' . $nombre . " " . $apellido . ", bienvenido");
+	return $output;
+  }
+  
+  function enlacemenu_url2(){
+   $output = t('Example url for module enlacemenu!');
+	return $output;
+  }
+  
+  function enlacemenu_listausuarios(){
+    $result = db_query("SELECT nid,title FROM {node} WHERE type='article' ");
+	
+	/*while( $fila = $result->fetchAssoc() ) {
+        print 'El nodo '.$fila['nid'].' se titula '.$fila['title'];
+    }
+    
+	$filas = $result->fetchAll();
+    foreach( $filas as $fila ) {
+        print 'El nodo '.$fila['nid'].' se titula '.$fila['title'];
+    }*/
+	
+	//Recuperamos los valores devueltos por la sentencia
+    while($record = $result->fetchAssoc()) {
+      dprint_r($record['nid'] . "  " . $record['title'] . "  ");
+    }
+  }
+  
+  function enlacemenu_permission() {
+    return array(
+      'access to enlacemenu' => array(
+        'title' => t('Access to enlacemenu restricted pages'),
+        'description' => t(' Allows access to restricted pages of
+          the menu items defined in enlacemenu'),
+      ),
+    );
+  }
+ 
+  /**
+  * Page callback - Intranet
+  */
+
+  function enlacemenu_intranet(){
+    $output = t('Página restringida para los usuarios con el permiso
+    adecuado');
+    return $output;
+  }
+  
+?>

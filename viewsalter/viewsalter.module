@@ -1,0 +1,17 @@
+<?php
+/*
+* Implements hook_views_api().
+*/
+function viewsalter_views_api() {
+ return array("version" => "3.0");
+}
+
+/*
+* Implements hook_views_query_alter().
+*/
+function viewsalter_views_query_alter(&$view, &$query) {
+ if ($view->name == 'agenda') {
+   $query->where[0]['type'] = "OR";
+ }
+}
+?>
