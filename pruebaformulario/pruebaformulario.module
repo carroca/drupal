@@ -3,7 +3,7 @@
   * Implements hook_menu().
   */
   
-  function forms_forcontu_menu() {
+  function pruebaformulario_menu() {
     $items['nire/form1'] = array(
 	  'title' => t('Example Form 1'),
 	  'page callback' => 'drupal_get_form',
