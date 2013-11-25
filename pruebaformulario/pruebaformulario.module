@@ -1,0 +1,33 @@
+<?php
+  /**
+  * Implements hook_menu().
+  */
+  
+  function forms_forcontu_menu() {
+    $items['nire/form1'] = array(
+	  'title' => t('Example Form 1'),
+	  'page callback' => 'drupal_get_form',
+	  'page arguments' => array('forms_nireneko_form1'),
+	  'access callback' => TRUE,
+	  'description' => t('Example Form 1'),
+	  'type' => MENU_CALLBACK,
+	);
+  }
+  
+  /**
+  * Function de retorno para la pagina nire/form1.
+  */
+  
+  function forms_nireneko_form1($form_state) {
+    $form['description'] = array(
+	  '#type' => 'item',
+	  '#title' => t('A simple form'),
+	);
+	
+	$form['full_name'] = array(
+	  '#type' => 'textfield',
+	  '#title' => t('Full name'),
+	);
+	return $form;
+  }
+?>

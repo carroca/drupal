@@ -1,0 +1,3 @@
+core = 7.x
+description = "Modulo creado a modo de prueba para probar los formularios"
+name = "Prueba Formulario"
