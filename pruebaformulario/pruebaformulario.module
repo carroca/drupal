@@ -12,6 +12,7 @@
 	  'description' => t('Example Form 1'),
 	  'type' => MENU_CALLBACK,
 	);
+	return $items;
   }
   
   /**
@@ -27,7 +28,25 @@
 	$form['full_name'] = array(
 	  '#type' => 'textfield',
 	  '#title' => t('Full name'),
+	  '#maxlength' => '10',
 	);
+	$form['password'] = array(
+	  '#type' => 'password',
+	  '#title' => t('Password'),
+	);
+	$form['email'] = array(
+	  '#type' => 'textfield',
+	  '#title' => t('Email'),
+	);
+	$form['city'] = array(
+	  '#type' => 'textfield',
+	  '#title' => t('City'),
+	);
+	
+	$form['submit'] = array(
+      '#type' => 'submit',
+      '#value' => 'Enviar',
+    );
 	return $form;
   }
 ?>
