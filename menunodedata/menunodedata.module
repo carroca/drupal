@@ -1,0 +1,54 @@
+<?php
+
+/**
+ * @file menunodedata.module
+ * TODO: Enter file description here.
+ */
+
+
+/**
+ * Implements hook_menu().
+ */
+function menunodedata_menu() {
+
+  $items['persona/%'] = array(
+	  'title' => 'Example URL 1',
+	  'page callback' => 'menunodedata_obtenerdatos',
+	  'access callback' => TRUE,
+	  'page arguments' => array(1),
+	  'type' => MENU_CALLBACK,
+	);
+	
+	$items['intranet'] = array(
+      'title' => 'Intranet',
+      'page callback' => 'menunodedata_intranet',
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+    );
+
+  return $items;
+}
+
+/**
+*  Implements 
+*/
+
+function menunodedata_obtenerdatos($datos = ''){
+
+  /*$result = db_query('SELECT nid, title FROM {node} WHERE nid = :nid', array(':nid' => $datos));
+  foreach ($result as $resultado) {
+    print $resulado->nid ."<br>";
+    print $resultado->title ."<br>";
+    print "<a href='". url(."node/". $resultado->nid)."''>Ver el nodo". $resultado->title ."</a>";
+  }*/
+  $output = t('Example url for module enlacemenu!');
+  return $output;
+}
+
+
+
+function menunodedata_intranet(){
+    $output = t('Página restringida para los usuarios con el permiso
+    adecuado');
+    return $output;
+  }

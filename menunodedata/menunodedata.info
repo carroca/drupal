@@ -1,0 +1,4 @@
+name = Menu Node data
+description = Toma la url y devuelve datos del nodo con la id
+package = rbcode
+core = 7.x

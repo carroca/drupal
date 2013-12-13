@@ -29,6 +29,7 @@
 	  '#type' => 'textfield',
 	  '#title' => t('Full name'),
 	  '#maxlength' => '10',
+	  '#value' => t('Put your name here'),
 	);
 	$form['password'] = array(
 	  '#type' => 'password',
@@ -42,10 +43,19 @@
 	  '#type' => 'textfield',
 	  '#title' => t('City'),
 	);
+
+	$form['actions'] = array('#type' => 'actions');
 	
-	$form['submit'] = array(
+    $form['actions']['submit'] = array(
       '#type' => 'submit',
-      '#value' => 'Enviar',
+      '#value' => t('Save'),
+    );
+    $form['actions']['delete'] = array(
+      '#type' => 'button',
+      '#value' => t('Delete'),
+    );
+    $form['actions']['cancel'] = array(
+      '#markup' => l(t('Cancel'), 'foo/bar'),
     );
 	return $form;
   }
