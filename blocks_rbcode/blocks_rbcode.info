@@ -1,0 +1,5 @@
+name = Blocks RBcode
+package = rbcode
+description = Modulo para pruebas con bloques
+core = 7.x
+version = "0.01"
