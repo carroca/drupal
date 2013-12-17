@@ -23,4 +23,8 @@ function blocks_rbcode_block_configure($delta = ''){
   }
   return $form;
 }
+
+function blocks_rbcode_block_save($delta = '', $edit = array()){
+
+}
 ?>
