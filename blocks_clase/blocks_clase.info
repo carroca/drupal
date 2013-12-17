@@ -1,5 +1,5 @@
-name = Blocks RBcode
-package = rbcode
+name = Blocks Clase
+package = Clase
 description = Modulo para pruebas con bloques
 core = 7.x
 version = "0.01"
