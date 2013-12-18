@@ -1,0 +1,56 @@
+<?php
+  function rbccontenttypes_node_info(){
+    return array(
+      'paciente' => array(
+        'name' => t('Patient for clinic'),
+        'base' => 'paciente',
+        'description' => t('Use to add a patient to clinic'),
+        'title_label' => t('Subject'),
+      ),
+    );
+  }
+
+  function rbccontenttypes_form(){
+
+    $type = node_type_get_type($node);
+
+    $form['title'] = array(
+      '#type' => 'textfield',
+      '#title' => check_plain($type->title_label),
+      '#default_value' => !empty($node->title) ? $node->title : '',
+      '#required' => TRUE,
+      '#weight' => -5,
+    );
+
+    $form['field1'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Custom field'),
+      '#default_value' => $node->field1,
+      '#maxlength' => 127,
+    );
+    
+    $form['quantity'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Quantity'),
+      '#default_value' => isset($node->quantity) ? $node->quantity : 0,
+      '#size' => 10,
+      '#maxlength' => 10,
+    );
+
+    $form['color'] array(
+      '#type' => 'select',
+      '#title' => t('Color'),
+      '#default_value' => $node->color,
+      '#options' array(
+        1 => 'Red',
+        2 => 'Green',
+        3 => 'Blue',
+      ),
+      '#description' => t('Choose a color.'),
+    );
+
+
+    return $form;
+
+  }
+?>
