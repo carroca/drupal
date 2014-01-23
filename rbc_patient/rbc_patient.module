@@ -1,5 +1,5 @@
 <?php
-  function rbccontenttypes_node_info(){
+  function rbc_patient_node_info(){
     return array(
       'paciente' => array(
         'name' => t('Patient for clinic'),
@@ -10,7 +10,7 @@
     );
   }
 
-  function rbccontenttypes_form(){
+  function rbc_patient_form(){
 
     $type = node_type_get_type($node);
 
@@ -48,9 +48,6 @@
       ),
       '#description' => t('Choose a color.'),
     );
-
-
     return $form;
-
   }
 ?>

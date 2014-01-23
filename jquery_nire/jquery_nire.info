@@ -1,0 +1,5 @@
+name = 'Jquery NireNeko'
+description = 'Modulo para probar jquery en nireneko'
+core = 7.x
+
+script[] = js/jquery_nire_example.js

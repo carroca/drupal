@@ -1,0 +1,23 @@
+<?php
+  /**
+  * Implements hook_menu().
+  */
+  function movernumeros_menu(){
+    $items = array();
+	$items['game/move'] = array(
+	  'title' => t('Move Numbers'),
+	  'page callback' => 'movernumeros_move_numbers',
+	  'access callback' => TRUE,
+	  'type' => MENU_NORMAL_ITEM,
+	  'menu_name' => 'main-menu',
+	);
+
+	return $items;
+  }
+
+  function movernumeros_move_numbers(){
+    drupal_add_js(drupal_get_path('module', 'movernumeros') . '/js/movernumeros.js');
+    $output = '<div id="movernumerogame"></div>';
+    return $output;
+  }
+?>

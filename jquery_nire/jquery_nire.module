@@ -1,0 +1,31 @@
+<?php
+  /**
+  * Implements hook_menu().
+  */
+  function jquery_nire_menu(){
+    $items = array();
+	$items['jquery_nire/example1'] = array(
+	  'title' => 'Ejemplo 1',
+	  'page callback' => 'jquery_nire_example1',
+	  'access callback' => TRUE,
+	  'type' => MENU_NORMAL_ITEM,
+	  'menu_name' => 'main-menu',
+	);
+	
+	$items['jquery_nire/example2'] = array(
+	  'title' => 'Ejemplo 2',
+	  'page callback' => 'jquery_nire_example2',
+	  'access calback' => TRUE,
+	  'type' => MENU_NORMAL_ITEM,
+	  'menu_name' => 'main-menu',
+	);
+	
+	return $items;
+  }
+  
+  function jquery_nire_example1(){
+    drupal_add_js(drupal_get_path('module', 'jquery_nire') . '/js/jquery_nire_example.js');
+	$output = '<a href="http://www.nireneko.com" target="_black" id="enlaceExample1">Ir a Nireneko.com</a>';
+	return $output;
+  }
+?>

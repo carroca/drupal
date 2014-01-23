@@ -1,0 +1,5 @@
+name = 'Move Numbers'
+description = 'A little game of move number in rows and collumns'
+core = 7.x
+
+script[] = js/movernumeros.js

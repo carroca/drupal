@@ -1,4 +1,4 @@
-name = "RBclinic content types"
+name = "Tipo paciente"
 core = "7.x"
 package = "rbclinics"
 description = "Add a content types to drupal"
