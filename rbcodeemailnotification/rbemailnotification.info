@@ -1,0 +1,7 @@
+name = "Email notification"
+core = 7.x
+Description = "Notifica por email al crear un evento a los usuarios con los que coincida la provincia con la del evento"
+
+files[] = rbemailnotification.admin.inc
+configure = admin/config/workflow/rb_email_notification
+package = "rbcode"

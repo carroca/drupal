@@ -1,0 +1,155 @@
+<?php
+
+  /**
+  * Implements hook_menu().
+  */
+  function rbemailnotification_menu() {
+    $items['admin/config/workflow/rb_email_notification'] = array(
+      'title' => 'RBcode Mail Notification',
+      'description' => 'Configuracion de RBcode Mail Notification',
+      'page callback' => 'drupal_get_form',
+      'page arguments' => array('rbemailnotification_admin_settings'),
+      'access callback' => 'user_access',
+      'access arguments' => array('administer site configuration'),
+      'type' => MENU_NORMAL_ITEM,
+      'file' => 'rbemailnotification.admin.inc',
+    );
+    return $items;
+  }
+
+  /*
+  * Implements hook_form_alter().
+  */
+  function rbemailnotification_form_alter(&$form, &$form_state, $form_id) {
+    switch($form_id) {
+	  case 'user_register_form': //Formulario de registro de usuario
+	    $form['emailnotification'] = array(
+		  '#type' => 'checkbox',
+		  '#title' => t('Deseo recibir por email notificaciones de eventos cercanos a mi'),
+		);
+	    break;
+		
+      case 'user_profile_form': //Formulario de edicion de usuario
+
+		$query = db_select('rbcode_email_accepted', 'rb')
+	      ->fields('rb', array('accepted'))
+	      ->condition('uid', $form['#user']->uid, '=');
+	    $result = $query->execute();
+	    $row = $result->fetchAssoc();
+		
+	    $form['emailnotification'] = array(
+		  '#type' => 'checkbox',
+		  '#title' => t('Deseo recibir por email notificaciones de eventos cercanos a mi'),
+		  '#default_value' => (($row['accepted']) ? $row['accepted'] : ''),
+		);
+	    break;
+	}
+  }
+
+  /*
+  * Implements hook_user_presave().
+  */
+  function rbemailnotification_user_presave(&$edit, $account, $category){
+    
+	$query = db_select('rbcode_email_accepted', 'rb')
+	  ->fields('rb', array('mid'))
+	  ->condition('uid', $account->uid, '=');
+	$result = $query->execute();
+	$row = $result->fetchAssoc();
+
+	if($row['mid'] == null || $row['mid'] == 0){
+	  db_insert('rbcode_email_accepted')
+	    ->fields( array(
+		  'uid' => $account->uid,
+		  'accepted' => $edit['emailnotification'],
+		))->execute();
+	} else {
+	  db_update('rbcode_email_accepted')
+	    ->fields(array(
+		  'accepted' => $edit['emailnotification'],
+		))
+		->condition('uid', $account->uid, '=')
+		->execute();
+	}
+
+  }
+  
+  /*
+  * Implements hook_user_delete().
+  */
+  function rbemailnotification_user_delete($account) {
+    db_delete('rbcode_email_accepted')->condition('uid', $account->uid)->execute();
+  }
+
+  /*
+  * Implements hook_node_insert().
+  */
+  function rbemailnotification_node_insert($node){
+    if($node->type == 'evento'){
+	  rbemailnotification_prepare_mail($node);
+	}
+  }
+  
+  /*
+  * Implements hook_mail().
+  */
+  function rbemailnotification_mail($key, &$message, $params){
+
+    //Revisar si las copias ocultas funcionan
+	//$message['headers']['Bcc'] = 'info@rbcode.net';
+    //$message['headers']['Cc'] = '';
+	$message['body'] = array();
+    $message['subject'] = t('Nuevo evento en tu provincia');
+    $message['body'][] = t('Prueba de envio al crear el evento <a href="@url">@title</a>', $params);
+  }
+  
+  /*
+  * Implements rbemailnotification_prepare_mail().
+  */
+  function rbemailnotification_prepare_mail($node) {
+
+    //Se obtiene la id de la provincia que se ha asignado al evento
+	$tid = $node->field_evento_provincia['und'][0]['tid'];
+	
+	$params = array(
+	  'node' => $node,
+	);
+	
+	//Se crea la consulta a la tabla users
+	$query = db_select('users', 'u');
+	
+	//campos que se obtienen de la tabla users
+	$query->fields('u', array('uid', 'name', 'mail'));
+	
+	//Joins de las consultas
+	$query->join('rbcode_email_accepted', 'rea', 'rea.uid = u.uid');
+	$query->join('field_data_field_user_provincia', 'fup', 'fup.entity_id = u.uid');
+	
+	//Condiciones de la consulta, que se halla aceptado recibir los correos y que la provincia coincida con el usuario.
+	$query->condition('rea.accepted', '1', '=');
+	$query->condition('fup.field_user_provincia_tid', $tid, '=');
+	
+	//Se ejecuta la consulta y se almacenan los resultados en $results
+	$results = $query->execute();
+
+	$to = '';
+	$toBcc = '';
+	while($result = $results->fetchAssoc()){
+	  $toBcc .= $result['mail'] . ',';
+	}
+	
+	$module = 'rbemailnotification';
+    $key = 'eventnotification';
+    $language = language_default();
+    $params = array(
+      '@url' => url('node/' . $node->nid, array('absolute' => TRUE, 'alias' => TRUE)),
+      '@title' => $node->title,
+	  'headers' => array('Cc' => $to, 'Bcc' => $toBcc),
+    );
+
+    drupal_mail($module, $key, $to, $language, $params);
+	
+	//En este momento tenemos todos los correos de todos los usuarios que coinciden con la provincia y que han aceptado recibir el correo 
+	//drupal_mail('rbemailnotification', 'eventnotification', $to, $language, $params);
+	
+  }

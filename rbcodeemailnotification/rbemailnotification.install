@@ -1,0 +1,47 @@
+<?php
+
+  /*
+  * Implements hook_schema().
+  */
+  function rbemailnotification_schema() {
+    $schema['rbcode_email_accepted'] = array(
+	  'description' => 'Almacena si el usuario acepta o no recibir emails',
+	  
+	  'fields' => array(
+	    'mid' => array(
+		  'type' => 'serial',
+		  'no null' => TRUE,
+		  'description' => 'clave foranea del usuario',
+		),
+	    'uid' => array(
+		  'type' => 'int',
+		  'no null' => TRUE,
+		  'description' => 'clave foranea del usuario',
+		),
+		'accepted' => array(
+		  'type' => 'int',
+		  'size' => 'tiny',
+		  'no null' => TRUE,
+		  'description' => 'Indica si el usuario acepta o no recibir emails',
+		),
+	  ),
+
+	  'primary key' => array(
+	    'mid',
+	  ),
+	  
+	  'unique keys' => array(
+        'uid' => array('uid'),
+      ),
+	  
+	  'foreing keys' => array(
+	    'user_accepted' => array(
+		  'table' => 'users',
+          'columns' => array('uid' => 'uid'),
+		),
+	  ),
+	);
+	
+	return $schema;
+  }
+?>

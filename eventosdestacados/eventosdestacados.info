@@ -1,0 +1,4 @@
+name = "Eventos destacados"
+core = 7.x
+Description = "Añade un bloque que muestra unos eventos destacados"
+package = "rbcode"

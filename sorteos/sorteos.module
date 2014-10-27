@@ -1,0 +1,38 @@
+<?php
+
+/* Implements hook_menu(). */
+
+function sorteos_menu(){
+  $items = array();
+  $items['sorteos'] = array(
+    'title' => 'Sorteos de la comunidad Battlecats',
+    'page callback' => 'sorteos_obtener_premiado',
+	'access arguments' => array('access content'),
+    'type' => MENU_SUGGESTED_ITEM,
+  );
+  
+  return $items;
+}
+
+function sorteos_obtener_premiado(){
+
+    //Se crea la consulta a la tabla users
+	$query = db_select('users', 'u');
+	$query->fields('u', array('name'));
+	$query->join('user_role', 'ur', 'ur.uid = u.uid');
+	$query->condition('ur.rid', '5', '=');
+	$results = $query->execute();
+
+	dpm($results);
+	//Se almacenan todos los nombres en un array
+	/*$user_name = array();
+	while($result = $results->fetchAssoc()){
+	  $user_name[] = $result['name'];
+	}
+
+	shuffle($user_name);
+
+	dpm($user_name);*/
+	
+	return "<p>Pagina de sorteos</p>";
+}

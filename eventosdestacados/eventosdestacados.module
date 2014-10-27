@@ -1,0 +1,209 @@
+<?php
+
+  /*
+  * Implements hook_block_info().
+  */
+  function eventosdestacados_block_info(){
+    $blocks['eventos_destacados'] = array(
+      'info' => t('Eventos destacados'),
+      'cache' => DRUPAL_NO_CACHE,
+    );
+    return $blocks;
+  }
+
+  /*
+  * Implemnts hook_block_view().
+  */
+  function eventosdestacados_block_view($delta = ''){
+    $block = array();
+
+    switch ($delta) {
+      case 'eventos_destacados':
+	$block['subject'] = t('Eventos destacados');
+	$content = eventosdestacados_obtener_nodo();
+	$block['content'] = $content;
+	break;
+    }
+    return $block;
+  }
+  
+  /*
+  * Implements eventosdestacados_obtener_nodo().
+  */
+  
+  function eventosdestacados_obtener_nodo(){
+
+    $aleat = rand(0,100);
+
+    if($aleat <= variable_get('eventosdestacados_porcentaje1') + variable_get('eventosdestacados_porcentaje2') + variable_get('eventosdestacados_porcentaje3') + variable_get('eventosdestacados_porcentaje4')){
+      $alias = variable_get('eventosdestacados_url4');
+    }
+	
+    if($aleat <= variable_get('eventosdestacados_porcentaje1') + variable_get('eventosdestacados_porcentaje2') + variable_get('eventosdestacados_porcentaje3')){
+      $alias = variable_get('eventosdestacados_url3');
+    }
+    if($aleat <= variable_get('eventosdestacados_porcentaje1') + variable_get('eventosdestacados_porcentaje2')){
+      $alias = variable_get('eventosdestacados_url2'); 
+    }
+    if($aleat <= variable_get('eventosdestacados_porcentaje1')){
+      $alias = variable_get('eventosdestacados_url1');
+    }
+    
+    //Obtiene la url real del nodo a traves de el alias de la url
+    $path = drupal_lookup_path("source", $alias);
+    //Obtiene el nodo a traves de la url
+    $node = menu_get_object("node", 1, $path);
+
+    //carga el objeto archivo de la imagen de usuario
+    $img_file = file_load($node->field_evento_cartel[und][0]);
+    //obtiene la URL final a partir de la URL en formato URI
+    $img_url = file_create_url($img_file->uri);
+    
+    $output = '<div class="eventos_destacados">';
+    $output .= '<div id="image">' . l('<img src="' . $img_url.'" rel="nofollow">', $alias , array('html'=>TRUE)) . '</div>';
+    $output .= '</div>';
+    return $output;
+    
+  }
+
+  /*
+  * Implements hook_block_configure().
+  */
+  function eventosdestacados_block_configure($delta = ''){
+    $form = array();
+
+    switch ($delta){
+      case 'eventos_destacados':
+
+        $form['eventos_destacados'] = array(
+	  '#type' => 'fieldset',
+	  '#title' => t('Configuracion del bloque'),
+	  '#collapsible' => TRUE,
+	  '#collapsed' => TRUE,
+        );
+
+	$form['eventos_destacados']['destacado1'] = array(
+	  '#type' => 'fieldset',
+	  '#title' => t('Configuracion del destacado 1'),
+	  '#collapsible' => TRUE,
+	  '#collapsed' => TRUE,
+        );
+
+        $form['eventos_destacados']['destacado1']['destacado1_url'] = array(
+          '#type' => 'textfield',
+          '#title' => t('URL del nodo'),
+	  '#default_value' => variable_get('eventosdestacados_url1', ''),
+          '#size' => 60,
+          '#maxlength' => 255,
+          '#required' => FALSE,
+        );
+
+        $form['eventos_destacados']['destacado1']['destacado1_porcentaje'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Porcentaje de aparicion del nodo'),
+	  '#default_value' => variable_get('eventosdestacados_porcentaje1', 0),
+          '#size' => 5,
+          '#maxlength' => 3,
+          '#required' => FALSE,
+        );
+		
+	$form['eventos_destacados']['destacado2'] = array(
+	  '#type' => 'fieldset',
+	  '#title' => t('Configuracion del destacado 2'),
+	  '#collapsible' => TRUE,
+	  '#collapsed' => TRUE,
+        );
+
+        $form['eventos_destacados']['destacado2']['destacado2_url'] = array(
+          '#type' => 'textfield',
+          '#title' => t('URL del nodo'),
+	  '#default_value' => variable_get('eventosdestacados_url2', ''),
+          '#size' => 60,
+          '#maxlength' => 255,
+          '#required' => FALSE,
+        );
+
+        $form['eventos_destacados']['destacado2']['destacado2_porcentaje'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Porcentaje de aparicion del nodo'),
+	  '#default_value' => variable_get('eventosdestacados_porcentaje2', 0),
+          '#size' => 5,
+          '#maxlength' => 3,
+          '#required' => FALSE,
+        );
+		
+	$form['eventos_destacados']['destacado3'] = array(
+	  '#type' => 'fieldset',
+	  '#title' => t('Configuracion del destacado 3'),
+	  '#collapsible' => TRUE,
+	  '#collapsed' => TRUE,
+        );
+
+        $form['eventos_destacados']['destacado3']['destacado3_url'] = array(
+          '#type' => 'textfield',
+          '#title' => t('URL del nodo'),
+	  '#default_value' => variable_get('eventosdestacados_url3', ''),
+          '#size' => 60,
+          '#maxlength' => 255,
+          '#required' => FALSE,
+        );
+
+        $form['eventos_destacados']['destacado3']['destacado3_porcentaje'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Porcentaje de aparicion del nodo'),
+	  '#default_value' => variable_get('eventosdestacados_porcentaje3', 0),
+          '#size' => 5,
+          '#maxlength' => 3,
+          '#required' => FALSE,
+        );
+
+	$form['eventos_destacados']['destacado4'] = array(
+	  '#type' => 'fieldset',
+	  '#title' => t('Configuracion del destacado 4'),
+	  '#collapsible' => TRUE,
+	  '#collapsed' => TRUE,
+        );
+
+        $form['eventos_destacados']['destacado4']['destacado4_url'] = array(
+          '#type' => 'textfield',
+          '#title' => t('URL del nodo'),
+	  '#default_value' => variable_get('eventosdestacados_url4', ''),
+          '#size' => 60,
+          '#maxlength' => 255,
+          '#required' => FALSE,
+        );
+
+        $form['eventos_destacados']['destacado4']['destacado4_porcentaje'] = array(
+          '#type' => 'textfield',
+          '#title' => t('Porcentaje de aparicion del nodo'),
+	  '#default_value' => variable_get('eventosdestacados_porcentaje4', 0),
+          '#size' => 5,
+          '#maxlength' => 3,
+          '#required' => FALSE,
+        );
+        break;
+    }
+    return $form;
+  }
+
+  /*
+  * Implements hook_block_save().
+  */
+  function eventosdestacados_block_save($delta = '', $edit = array()){
+  
+    switch ($delta){
+      case 'eventos_destacados':
+        variable_set('eventosdestacados_url1', $edit['destacado1_url']);
+	variable_set('eventosdestacados_porcentaje1', $edit['destacado1_porcentaje']);
+
+	variable_set('eventosdestacados_url2', $edit['destacado2_url']);
+	variable_set('eventosdestacados_porcentaje2', $edit['destacado2_porcentaje']);
+
+	variable_set('eventosdestacados_url3', $edit['destacado3_url']);
+	variable_set('eventosdestacados_porcentaje3', $edit['destacado3_porcentaje']);
+
+	variable_set('eventosdestacados_url4', $edit['destacado4_url']);
+	variable_set('eventosdestacados_porcentaje4', $edit['destacado4_porcentaje']);
+	break;
+    }
+  }
